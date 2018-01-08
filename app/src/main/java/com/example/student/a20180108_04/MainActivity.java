@@ -7,9 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     ListView lv;
     //String str[] = {"AA", "BB", "CCC", "DDDD", "EE"};     自己做layout，所以刪除
     ArrayList<Map<String,Object>> mylist =new ArrayList<>();
+    boolean chks[]=new boolean[8];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,20 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(adapter);
 
     }
+
+    public void click1(View v)
+    {
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<chks.length;i++)
+        {
+            if(chks[i])
+            {
+                sb.append(mylist.get(i).get("city")+",");
+            }
+        }
+        Toast.makeText(MainActivity.this,sb.toString(),Toast.LENGTH_LONG).show();
+    }
+
     class MyAdapter extends BaseAdapter
     {
 
@@ -94,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
+        public View getView(final int position, View view, ViewGroup viewGroup) {
             //TextView tv = new TextView(MainActivity.this);        自己做layout的話，這行要改成下面那行
             LayoutInflater inflater=LayoutInflater.from(MainActivity.this);
             View v = inflater.inflate(R.layout.myitem, null);   //解壓器，詳閱20180105_01的Dialog
@@ -109,8 +128,22 @@ public class MainActivity extends AppCompatActivity {
             ImageView img = v.findViewById(R.id.imageView);
             img.setImageResource((Integer) mylist.get(position).get("img"));
 
+            CheckBox chk = (CheckBox) v.findViewById(R.id.checkBox);
+            chk.setChecked(chks[position]);
+            chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean b) {
+                    chks[position]=b;
+
+                }
+            });
+
+
+
             //return tv;    自己做layout的話，改傳v
             return  v;
         }
+
+
     }
 }
