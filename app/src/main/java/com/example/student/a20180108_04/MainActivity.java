@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     boolean chks[]=new boolean[8];
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
         mylist.add(m7);
 
         lv = (ListView) findViewById(R.id.listView);
-        MyAdapter adapter = new MyAdapter();
+        //MyAdapter adapter = new MyAdapter();      為了把calss myadapter移出去，要加引數如下行
+        MyAdapter adapter = new MyAdapter(MainActivity.this,mylist,chks);   //同class MyAdapter第23行原因，新增引數3chks
         lv.setAdapter(adapter);
 
     }
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder sb=new StringBuilder();
         for(int i=0;i<chks.length;i++)
         {
-            if(chks[i])
+            if(chks[i])     //將class MyAdapter移出去後，MainActivity跟MyAdapter的chks就是不同的chks，所以要改成指向同一個chks
             {
                 sb.append(mylist.get(i).get("city")+",");
             }
@@ -93,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this,sb.toString(),Toast.LENGTH_LONG).show();
     }
 
+    /*因為已勾選部分移出手機畫面時，整個VIEW跟勾選會消失，如此反覆讀取與刪除對效能不好，
+    所以優化手法有兩種，第一種為下方class MyAdapter移到外面的MyAdapter
     class MyAdapter extends BaseAdapter
     {
 
@@ -145,5 +149,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-    }
+    }*/
 }
